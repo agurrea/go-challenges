@@ -158,7 +158,7 @@ func getInstance() *Promise {
 /*********************************************
  Returns a promise object
 *********************************************/
-func GetPromise(str string) *Promise {
+func getPromise(str string) *Promise {
    p := getInstance()
    p.wg.Add(1)
    go func() {
@@ -171,7 +171,7 @@ func GetPromise(str string) *Promise {
 /*********************************************
  Process callback when a promise returns
 *********************************************/
-func (p *Promise) Then (r func(int64, int64)) {
+func (p *Promise) then (r func(int64, int64)) {
    p.wg.Wait()
    r(p.total, p.donated)
 }
@@ -230,10 +230,10 @@ func main() {
 	
 	for scanner.Scan() {
 		<-r_limiter
-		p = GetPromise(scanner.Text())
+		p = getPromise(scanner.Text())
 	}
 	
-	p.Then(
+	p.then(
 	  func(total int64, donated int64) {
 	     // calculate faulty donations, avg amount donated per donor
 	     faulty_donations := total - donated
